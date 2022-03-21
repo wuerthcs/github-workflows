@@ -1,0 +1,125 @@
+name: main reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      app_name:
+        required: true
+        type: string
+      namespace:
+        required: true
+        type: string
+
+jobs:
+  package:
+    name: Build image container, store in ghcr.io
+    runs-on: ubuntu-18.04 # ATTN - if change, needs also updated `.actrc`
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Package container image (backend)
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: Dockerfile
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USER }}
+          password: ${{ secrets.GHCR_TOKEN }}
+          repository: wuerthcs/${{inputs.app_name}}
+          add_git_labels: true
+          tag_with_ref: true
+          tag_with_sha: true
+
+  deploy:
+    runs-on: ubuntu-18.04
+    name: Deploy to OpenShift
+    needs:
+      - package
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/prod'
+
+    steps:
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@v1.7.3
+        with:
+          oc: '4.7'
+
+      - name: Set OpenShift context (dev)
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: https://api.dev01.squeegee.cloud:6443
+          openshift_token: ${{ secrets.OCP_TOKEN_DEV }}
+          namespace: ${{inputs.namespace}}
+        if: github.ref == 'refs/heads/dev'
+
+      - name: Set OpenShift context (stage)
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: https://api.stage01.squeegee.cloud:6443
+          openshift_token: ${{ secrets.OCP_TOKEN_STAGE }}
+          namespace: ${{inputs.namespace}}
+        if: github.ref == 'refs/heads/stage'
+
+      - name: Set OpenShift context (prod)
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: https://api.prod01.squeegee.cloud:6443
+          openshift_token: ${{ secrets.OCP_TOKEN_PROD }}
+          namespace: ${{inputs.namespace}}
+        if: github.ref == 'refs/heads/prod'
+
+      - name: deploy
+        run: |
+          TAG=sha-$(echo ${{ github.sha }} | cut --characters=1-7)
+          CONTAINER_IMAGE=ghcr.io/wuerthcs/dummy-service:$TAG
+          oc patch deployment/${{inputs.app_name}} -p '{"spec":{"progressDeadlineSeconds":300}}'
+          oc set image deployment/${{inputs.app_name}} ${{inputs.app_name}}=$CONTAINER_IMAGE
+          oc rollout status deployment/${{inputs.app_name}}
+
+      - name: Slack success (dev)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_DEV}}
+          SLACK_TITLE: '${{inputs.app_name}} Deployment Success!'
+          SLACK_COLOR: '#228B22'
+        if: success() && github.ref == 'refs/heads/dev'
+
+      - name: Slack success (stage)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_STAGE}}
+          SLACK_TITLE: '${{inputs.app_name}} Deployment Success!'
+          SLACK_COLOR: '#228B22'
+        if: success() && github.ref == 'refs/heads/stage'
+
+      - name: Slack success (prod)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_PROD}}
+          SLACK_TITLE: '${{inputs.app_name}} Deployment Success!'
+          SLACK_COLOR: '#228B22'
+        if: success() && github.ref == 'refs/heads/prod'
+
+      - name: Slack failure (dev)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_DEV}}
+          SLACK_TITLE: '${{inputs.app_name}} Deployment Failure!'
+          SLACK_COLOR: '#E01E5A'
+        if: failure() && github.ref == 'refs/heads/dev'
+
+      - name: Slack failure (stage)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_STAGE}}
+          SLACK_TITLE: '${{inputs.app_name}} Deployment Failure!'
+          SLACK_COLOR: '#E01E5A'
+        if: failure() && github.ref == 'refs/heads/stage'
+
+      - name: Slack failure (prod)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_PROD}}
+          SLACK_TITLE: '${{inputs.app_name}} Deployment Failure!'
+          SLACK_COLOR: '#E01E5A'
+        if: failure() && github.ref == 'refs/heads/prod'
+
