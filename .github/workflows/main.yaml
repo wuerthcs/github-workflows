@@ -66,6 +66,7 @@ jobs:
           openshift_server_url: https://api.dev01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_DEV }}
           namespace: ${{ inputs.namespace }}
+          context: .
         if: github.ref == 'refs/heads/dev'
 
       - name: Set OpenShift context (stage)
