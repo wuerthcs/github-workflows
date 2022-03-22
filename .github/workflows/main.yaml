@@ -9,6 +9,8 @@ on:
       namespace:
         required: true
         type: string
+      TAG:
+        type: string
     secrets:
       GHCR_USER:
         required: true
@@ -87,7 +89,7 @@ jobs:
       - name: deploy
         run: |
           TAG=sha-$(echo ${{ github.sha }} | cut --characters=1-7)
-          CONTAINER_IMAGE=ghcr.io/wuerthcs/${{inputs.app_name}}:$TAG
+          CONTAINER_IMAGE=ghcr.io/wuerthcs/${{inputs.app_name}}:${{inputs.TAG}}
           oc patch deployment/${{inputs.app_name}} -p '{"spec":{"progressDeadlineSeconds":300}}'
           oc set image deployment/${{inputs.app_name}} ${{inputs.app_name}}=$CONTAINER_IMAGE
           oc rollout status deployment/${{inputs.app_name}}
