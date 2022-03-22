@@ -9,8 +9,6 @@ on:
       namespace:
         required: true
         type: string
-      TAG:
-        type: string
     secrets:
       GHCR_USER:
         required: true
@@ -44,7 +42,7 @@ jobs:
           registry: ghcr.io
           username: ${{ secrets.GHCR_USER }}
           password: ${{ secrets.GHCR_TOKEN }}
-          repository: wuerthcs/${{inputs.app_name}}
+          repository: wuerthcs/${{ inputs.app_name }}
           add_git_labels: true
           tag_with_ref: true
           tag_with_sha: true
@@ -67,7 +65,7 @@ jobs:
         with:
           openshift_server_url: https://api.dev01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_DEV }}
-          namespace: ${{inputs.namespace}}
+          namespace: ${{ inputs.namespace }}
         if: github.ref == 'refs/heads/dev'
 
       - name: Set OpenShift context (stage)
@@ -75,7 +73,7 @@ jobs:
         with:
           openshift_server_url: https://api.stage01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_STAGE }}
-          namespace: ${{inputs.namespace}}
+          namespace: ${{ inputs.namespace }}
         if: github.ref == 'refs/heads/stage'
 
       - name: Set OpenShift context (prod)
@@ -83,62 +81,62 @@ jobs:
         with:
           openshift_server_url: https://api.prod01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_PROD }}
-          namespace: ${{inputs.namespace}}
+          namespace: ${{ inputs.namespace }}
         if: github.ref == 'refs/heads/prod'
 
       - name: deploy
         run: |
           TAG=sha-$(echo ${{ github.sha }} | cut --characters=1-7)
-          CONTAINER_IMAGE=ghcr.io/wuerthcs/${{inputs.app_name}}:${{inputs.TAG}}
-          oc patch deployment/${{inputs.app_name}} -p '{"spec":{"progressDeadlineSeconds":300}}'
-          oc set image deployment/${{inputs.app_name}} ${{inputs.app_name}}=$CONTAINER_IMAGE
-          oc rollout status deployment/${{inputs.app_name}}
+          CONTAINER_IMAGE=ghcr.io/wuerthcs/${{ inputs.app_name }}:$TAG
+          oc patch deployment/${{ inputs.app_name }} -p '{"spec":{"progressDeadlineSeconds":300}}'
+          oc set image deployment/${{ inputs.app_name }} ${{ inputs.app_name }}=$CONTAINER_IMAGE
+          oc rollout status deployment/${{ inputs.app_name }}
 
       - name: Slack success (dev)
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_DEV}}
-          SLACK_TITLE: '${{inputs.app_name}} Deployment Success!'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV }}
+          SLACK_TITLE: '${{ inputs.app_name }} Deployment Success!'
           SLACK_COLOR: '#228B22'
         if: success() && github.ref == 'refs/heads/dev'
 
       - name: Slack success (stage)
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_STAGE}}
-          SLACK_TITLE: '${{inputs.app_name}} Deployment Success!'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_STAGE }}
+          SLACK_TITLE: '${{ inputs.app_name }} Deployment Success!'
           SLACK_COLOR: '#228B22'
         if: success() && github.ref == 'refs/heads/stage'
 
       - name: Slack success (prod)
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_PROD}}
-          SLACK_TITLE: '${{inputs.app_name}} Deployment Success!'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PROD }}
+          SLACK_TITLE: '${{ inputs.app_name }} Deployment Success!'
           SLACK_COLOR: '#228B22'
         if: success() && github.ref == 'refs/heads/prod'
 
       - name: Slack failure (dev)
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_DEV}}
-          SLACK_TITLE: '${{inputs.app_name}} Deployment Failure!'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV }}
+          SLACK_TITLE: '${{ inputs.app_name }} Deployment Failure!'
           SLACK_COLOR: '#E01E5A'
         if: failure() && github.ref == 'refs/heads/dev'
 
       - name: Slack failure (stage)
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_STAGE}}
-          SLACK_TITLE: '${{inputs.app_name}} Deployment Failure!'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_STAGE }}
+          SLACK_TITLE: '${{ inputs.app_name }} Deployment Failure!'
           SLACK_COLOR: '#E01E5A'
         if: failure() && github.ref == 'refs/heads/stage'
 
       - name: Slack failure (prod)
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_PROD}}
-          SLACK_TITLE: '${{inputs.app_name}} Deployment Failure!'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PROD }}
+          SLACK_TITLE: '${{ inputs.app_name }} Deployment Failure!'
           SLACK_COLOR: '#E01E5A'
         if: failure() && github.ref == 'refs/heads/prod'
 
