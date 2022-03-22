@@ -93,9 +93,9 @@ jobs:
           CONTAINER_IMAGE=ghcr.io/$GITHUB_REPOSITORY:$TAG
           TRIGGER_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
           CHANGE_CAUSE="Commit: $TAG, Trigger: $TRIGGER_URL"
-          oc set image deployment/$BASE_NAME $BASE_NAME=$CONTAINER_IMAGE
-          oc annotate deployment/$BASE_NAME kubernetes.io/change-cause="$CHANGE_CAUSE"
-          oc rollout status deployment/$BASE_NAME
+          oc -n ${{ inputs.namespace }} set image deployment/$BASE_NAME $BASE_NAME=$CONTAINER_IMAGE
+          oc -n ${{ inputs.namespace }} annotate deployment/$BASE_NAME kubernetes.io/change-cause="$CHANGE_CAUSE"
+          oc -n ${{ inputs.namespace }} rollout status deployment/$BASE_NAME
 
       - name: Slack success (dev)
         uses: rtCamp/action-slack-notify@master
