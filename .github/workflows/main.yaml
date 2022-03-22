@@ -9,6 +9,17 @@ on:
       namespace:
         required: true
         type: string
+    secrets:
+      GHCR_USER:
+        required: true
+      GHCR_TOKEN:
+        required: true
+      OCP_TOKEN_DEV:
+        required: true
+      OCP_TOKEN_STAGE:
+        required: true
+      OCP_TOKEN_PROD:
+        required: true
 
 jobs:
   package:
