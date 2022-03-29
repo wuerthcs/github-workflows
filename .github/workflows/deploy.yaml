@@ -28,10 +28,9 @@ env:
 
 jobs:
   deploy:
+
     runs-on: ubuntu-18.04
     name: Deploy to OpenShift
-    needs:
-      - package
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/prod'
 
     steps:

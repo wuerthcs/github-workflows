@@ -11,7 +11,6 @@ env:
   BASE_NAME: ${{ inputs.app_name }}
 
 jobs:
-
   verify:
     name: "Verify (lint) with multiple linters"
     runs-on: ubuntu-18.04
