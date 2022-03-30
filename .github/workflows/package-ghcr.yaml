@@ -1,5 +1,4 @@
-# DEPCRECATED - use package-ghcr instead
-name: reusable build workflow
+name: reusablbe package to Github Container Registry
 
 on:
   workflow_call:
@@ -7,27 +6,29 @@ on:
       app_name:
         required: true
         type: string
+      dockerfile:
+        required: false
+        type: string
+        default: 'Dockerfile'
     secrets:
       GHCR_USER:
         required: true
       GHCR_TOKEN:
         required: true
 
-env:
-  BASE_NAME: ${{ inputs.app_name }}
-
 jobs:
   package:
     name: Build image container, store in ghcr.io
-    runs-on: ubuntu-18.04 # ATTN - if change, needs also updated `.actrc`
+    runs-on: ubuntu-18.04 # ATTN - if change, needs also updated `.actrc` in main repo!
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Package container image (backend)
         uses: docker/build-push-action@v1
         with:
-          dockerfile: Dockerfile
+          dockerfile: ${{ inputs.dockerfile }}
           registry: ghcr.io
           username: ${{ secrets.GHCR_USER }}
           password: ${{ secrets.GHCR_TOKEN }}

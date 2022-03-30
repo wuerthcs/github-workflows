@@ -1,5 +1,4 @@
-# DEPRECATED: use deploy-openshift instead
-name: reusable deploy workflow
+name: reusable deploy to OpenShift Container Platform
 
 on:
   workflow_call:
@@ -43,6 +42,7 @@ jobs:
       - name: Set OpenShift context (dev)
         uses: redhat-actions/oc-login@v1.1
         with:
+          # TODO don't like this in public repo
           openshift_server_url: https://api.dev01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_DEV }}
           namespace: ${{ inputs.namespace }}

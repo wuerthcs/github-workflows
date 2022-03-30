@@ -1,5 +1,4 @@
-# DEPRECATED - use verify-megalint instead
-name: reusable verify workflow
+name: reusable verify w/ Megalint https://megalinter.github.io
 
 on:
   workflow_call:
@@ -7,9 +6,10 @@ on:
       app_name:
         required: true
         type: string
-
-env:
-  BASE_NAME: ${{ inputs.app_name }}
+      megalint_flavor:
+        required: false
+        type: string
+        default: 'java'
 
 jobs:
   verify:
@@ -23,9 +23,10 @@ jobs:
           fetch-depth: 0
 
       - name: lint all
-        uses: nvuillam/mega-linter/flavors/java@v4
+        uses: nvuillam/mega-linter/flavors/${{ inputs.megalint_flavor }}@v4
         env:
           # main config via .mega-linter.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # TODO this is a hack to enable local runs with act. It's unclear why act doesn't set the path correctly
+          # ATTN act is not working w/ reusable workflows anyway
           PATH: '~/.raku/bin:/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/site/bin:/root/.composer/vendor/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/root/.cargo/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/'
