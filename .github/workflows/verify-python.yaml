@@ -22,7 +22,8 @@ jobs:
           fetch-depth: 0
 
       - name: lint all
-        uses: nvuillam/mega-linter/flavors/python@v4
+        uses: megalinter/megalinter@v5
+        # uses: nvuillam/mega-linter/flavors/python@v4
         env:
           # main config via .mega-linter.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
