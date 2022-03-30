@@ -21,11 +21,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: lint all
-        uses: nvuillam/mega-linter/flavors/python@v0
-        env:
-          # main config via .mega-linter.yml
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # TODO this is a hack to enable local runs with act. It's unclear why act doesn't set the path correctly
-          PATH: '~/.raku/bin:/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/site/bin:/root/.composer/vendor/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/root/.cargo/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/'
+#      - name: lint all
+#        uses: nvuillam/mega-linter/flavors/python@v2
+#        env:
+#          # main config via .mega-linter.yml
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          # TODO this is a hack to enable local runs with act. It's unclear why act doesn't set the path correctly
+#          PATH: '~/.raku/bin:/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/site/bin:/root/.composer/vendor/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/root/.cargo/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/'
 
