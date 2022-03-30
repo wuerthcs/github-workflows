@@ -1,2 +1,2 @@
-# re-usable
-Repo for reusable worklows
+# github-workflows
+Repo for Github Actions reusable worklows.
