@@ -6,10 +6,6 @@ on:
       app_name:
         required: true
         type: string
-      megalint_flavor:
-        required: false
-        type: string
-        default: 'java'
 
 jobs:
   verify:
@@ -23,7 +19,8 @@ jobs:
           fetch-depth: 0
 
       - name: lint all
-        uses: nvuillam/mega-linter/flavors/${{ inputs.megalint_flavor }}@v4
+        # TODO find a better way to support flavors. Cannot use `inputs` in `uses`
+        uses: nvuillam/mega-linter/flavors/all@v4
         env:
           # main config via .mega-linter.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
