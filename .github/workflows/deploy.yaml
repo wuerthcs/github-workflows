@@ -70,6 +70,8 @@ jobs:
           CONTAINER_IMAGE=ghcr.io/$GITHUB_REPOSITORY:$TAG
           TRIGGER_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
           CHANGE_CAUSE="Commit: $TAG, Trigger: $TRIGGER_URL"
+          oc whoami
+          oc project
           oc set image deployment/$BASE_NAME $BASE_NAME=$CONTAINER_IMAGE
           oc annotate deployment/$BASE_NAME kubernetes.io/change-cause="$CHANGE_CAUSE"
           oc rollout status deployment/$BASE_NAME
