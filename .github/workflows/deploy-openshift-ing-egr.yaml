@@ -1,4 +1,4 @@
-name: reusable deploy to OpenShift Container Platform
+name: reusable deploy to OpenShift Container Platform for engree-egree application pods
 
 on:
   workflow_call:
