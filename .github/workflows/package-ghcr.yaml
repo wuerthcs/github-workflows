@@ -19,7 +19,7 @@ on:
 jobs:
   package:
     name: Build image container, store in ghcr.io
-    runs-on: ubuntu-18.04 # ATTN - if change, needs also updated `.actrc` in main repo!
+    runs-on: ubuntu-22.04 # ATTN - if change, needs also updated `.actrc` in main repo!
 
     steps:
       - name: Checkout
