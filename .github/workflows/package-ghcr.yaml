@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-22.04 # ATTN - if change, needs also updated `.actrc` in main repo!
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Docker meta
         id: meta
