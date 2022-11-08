@@ -6,6 +6,10 @@ on:
       app_name:
         required: true
         type: string
+      dockerfile:
+        required: false
+        type: string
+        default: 'Dockerfile'
     secrets:
       GHCR_USER:
         required: true
