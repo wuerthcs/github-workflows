@@ -11,8 +11,8 @@ on:
         required: true
       GHCR_TOKEN:
         required: true
-#      GH_TOKEN:
-#        required: false
+      GH_TOKEN:
+        required: false
 
 jobs:
   package:
