@@ -11,8 +11,8 @@ on:
         required: true
       GHCR_TOKEN:
         required: true
-      GH_TOKEN:
-        required: false
+#      GH_TOKEN:
+#        required: false
 
 jobs:
   package:
@@ -48,5 +48,5 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GH_TOKEN }}
+#          secrets: |
+#            GIT_AUTH_TOKEN=${{ secrets.GH_TOKEN }}
