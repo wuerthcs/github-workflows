@@ -6,6 +6,9 @@ on:
       app_name:
         required: true
         type: string
+      docker_file:
+        required: false
+        type: string
     secrets:
       GHCR_USER:
         required: true
@@ -43,6 +46,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: ${{ inputs.docker_file }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
