@@ -6,7 +6,7 @@ on:
       app_name:
         required: true
         type: string
-      docker_file:
+      dockerfile:
         required: false
         type: string
     secrets:
