@@ -45,8 +45,7 @@ jobs:
       - name: Package container image and push to the registry
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./${{ inputs.docker_file }}
+          file: ${{ inputs.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
