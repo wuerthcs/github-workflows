@@ -20,7 +20,7 @@ jobs:
 
       - name: lint all
         # TODO find a better way to support flavors. Cannot use `inputs` in `uses`
-        uses: nvuillam/mega-linter/flavors/javascript@6
+        uses: oxsecurity/megalinter/flavors/javascript@v6.19.0
         env:
           # main config via .mega-linter.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
