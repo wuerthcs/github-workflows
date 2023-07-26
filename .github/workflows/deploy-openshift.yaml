@@ -37,7 +37,7 @@ jobs:
       - name: Install oc
         uses: redhat-actions/openshift-tools-installer@v1.12
         with:
-          oc: '4.7'
+          oc: '4.9'
 
       - name: Set OpenShift context (dev)
         uses: redhat-actions/oc-login@v1.2
