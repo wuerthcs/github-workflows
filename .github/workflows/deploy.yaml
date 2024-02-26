@@ -79,8 +79,9 @@ jobs:
         env:
           SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
-          SLACK_MESSAGE: " "
+          SLACK_MESSAGE: "${{ github.head_ref }} has triggered this run"
           SLACK_FOOTER: " "
+          MSG_MINIMAL: "Ref,Actions URL,Commit"
 
         if: success()
 
@@ -89,8 +90,9 @@ jobs:
         env:
           SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
-          SLACK_MESSAGE: " "
+          SLACK_MESSAGE: "${{ github.head_ref }} has triggered this run"
           SLACK_FOOTER: " "
+          MSG_MINIMAL: "Ref,Actions URL,Commit"
         if: failure()
 
       
