@@ -79,7 +79,9 @@ jobs:
         env:
           SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
-          SLACK_FOOTER: ""
+          SLACK_MESSAGE: " "
+          SLACK_FOOTER: " "
+
         if: success()
 
       - name: Slack failure
@@ -87,7 +89,8 @@ jobs:
         env:
           SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
-          SLACK_FOOTER: ""
+          SLACK_MESSAGE: " "
+          SLACK_FOOTER: " "
         if: failure()
 
       
