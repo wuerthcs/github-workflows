@@ -62,15 +62,12 @@ jobs:
             {
               "dev": {
                 "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_DEV }}",
-                "SLACK_CHANNEL": "deploy-flywheel-dev"
               },
               "stage": {
                 "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_STAGE }}",
-                "SLACK_CHANNEL": "deploy-flywheel-stage"
               },
               "prod": {
                 "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}",
-                "SLACK_CHANNEL": "deploy-flywheel-prod"
               }
             }
       
