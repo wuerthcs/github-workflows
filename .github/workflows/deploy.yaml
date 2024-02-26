@@ -1,0 +1,95 @@
+name: Deploy Workflow
+
+on:
+  push:
+    branches: 
+      - dev
+      - stage
+      - prod
+
+jobs:
+  Deploy:
+    name: main
+    timeout-minutes: 15
+    runs-on: ubuntu-22.04
+          
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      # - name: Setup Node.js environment
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version-file: '.nvmrc'
+
+      # - name: Install Yarn
+      #   run: corepack enable &&
+      #        corepack prepare yarn@stable --activate
+      
+      # - name: Update dependencies
+      #   run: yarn install --immutable
+      
+      # - name: Compile development branch
+      #   run: yarn build
+      #   env:
+      #     CI_ENV: ${{ github.ref_name }}
+        
+      # - name: Install copilot
+      #   uses: ksivamuthu/aws-copilot-github-action@v0.0.7
+      #   with:
+      #     command: install
+        
+      # - name: Login to AWS account
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: eu-central-1
+        
+      # # TODO Should be done directly w/ copilot action above, but it does not (yet) support `--all` flag
+      # - name: Deploy to AWS
+      #   run: copilot deploy --all --env ${{ github.ref_name }}
+        
+      
+      
+      - name: Mapping for slack notification
+        uses: kanga333/variable-mapper@v0.3.0
+        with:
+          key: "${{ github.ref_name }}"
+          map: |
+            {
+              "dev": {
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_FW_DEV }}",
+                "SLACK_CHANNEL": "deploy-flywheel-dev"
+              },
+              "stage": {
+                "SLACK_WEBHOOK": "${{ SLACK_WEBHOOK_FW_STAGE }}",
+                "SLACK_CHANNEL": "deploy-flywheel-stage"
+              },
+              "prod": {
+                "SLACK_WEBHOOK": "${{ SLACK_WEBHOOK_FW_PROD }}",
+                "SLACK_CHANNEL": "deploy-flywheel-prod"
+              }
+            }
+      
+      - name: Slack success (dev)
+        if: success()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: "${{ github.event.pull_request.base.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on flywheel-dev has been Successful!"
+          SLACK_COLOR: "#228B22"
+        
+
+      - name: Slack failure (dev)
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: "${{ github.event.pull_request.base.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on flywheel-dev has Failed!"
+          SLACK_COLOR: "#E01E5A"
+        
+
+     
