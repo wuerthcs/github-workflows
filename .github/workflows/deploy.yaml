@@ -75,21 +75,52 @@ jobs:
             }
       
       - name: Slack success (dev)
-        if: success()
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_MESSAGE: "${{ github.event.pull_request.base.ref }} has triggered this run"
-          SLACK_TITLE: "${{ github.job }} on flywheel-dev has been Successful!"
+          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
-        
+        if: success() && github.ref == 'refs/heads/dev'
+
+      - name: Slack success (stage)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
+          SLACK_COLOR: "#228B22"
+        if: success() && github.ref == 'refs/heads/stage'
+
+      - name: Slack success (prod)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
+          SLACK_COLOR: "#228B22"
+        if: success() && github.ref == 'refs/heads/prod'
 
       - name: Slack failure (dev)
-        if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_MESSAGE: "${{ github.event.pull_request.base.ref }} has triggered this run"
-          SLACK_TITLE: "${{ github.job }} on flywheel-dev has Failed!"
+          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has Failed!"
           SLACK_COLOR: "#E01E5A"
+        if: failure() && github.ref == 'refs/heads/dev'
+
+      - name: Slack failure (stage)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has Failed!"
+          SLACK_COLOR: "#E01E5A"
+        if: failure() && github.ref == 'refs/heads/stage'
         
+      - name: Slack failure (prod)
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has Failed!"
+          SLACK_COLOR: "#E01E5A"
+        if: failure() && github.ref == 'refs/heads/prod'
+       
 
      
