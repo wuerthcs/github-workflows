@@ -61,15 +61,15 @@ jobs:
           map: |
             {
               "dev": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_FW_DEV }}",
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_DEV }}",
                 "SLACK_CHANNEL": "deploy-flywheel-dev"
               },
               "stage": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_FW_STAGE }}",
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_STAGE }}",
                 "SLACK_CHANNEL": "deploy-flywheel-stage"
               },
               "prod": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_FW_PROD }}",
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}",
                 "SLACK_CHANNEL": "deploy-flywheel-prod"
               }
             }
