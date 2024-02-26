@@ -77,17 +77,17 @@ jobs:
       - name: Slack success
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_MESSAGE: "${{ github.ref_name }} has triggered this run"
           SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
+          SLACK_FOOTER: ""
         if: success()
 
       - name: Slack failure
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_MESSAGE: "${{ github.ref_name }} has triggered this run"
           SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
           SLACK_COLOR: "#228B22"
+          SLACK_FOOTER: ""
         if: failure()
 
       
