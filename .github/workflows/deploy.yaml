@@ -79,8 +79,7 @@ jobs:
           SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
           SLACK_FOOTER: " "
           MSG_MINIMAL: "Ref,Actions URL,Commit"
-
-        if: success()
+        if: success() && github.ref == 'refs/heads/dev'
 
       - name: Slack failure
         uses: rtCamp/action-slack-notify@master
@@ -90,6 +89,6 @@ jobs:
           SLACK_MESSAGE: "${{ github.event.pull_request.head.ref  }} has triggered this run"
           SLACK_FOOTER: " "
           MSG_MINIMAL: "Ref,Actions URL,Commit"
-        if: failure()
+        if: failure() github.ref == 'refs/heads/dev'
 
       
