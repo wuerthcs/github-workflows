@@ -67,7 +67,7 @@ jobs:
                 "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_STAGE }}",
               },
               "prod": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}",
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}"
               }
             }
       
