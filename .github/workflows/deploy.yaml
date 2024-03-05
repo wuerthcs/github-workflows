@@ -89,6 +89,6 @@ jobs:
           SLACK_MESSAGE: "${{ github.event.pull_request.head.ref  }} has triggered this run"
           SLACK_FOOTER: " "
           MSG_MINIMAL: "Ref,Actions URL,Commit"
-        if: failure() github.ref == 'refs/heads/dev'
+        if: failure() && github.ref == 'refs/heads/dev'
 
       
