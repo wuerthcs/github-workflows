@@ -63,22 +63,22 @@ jobs:
         
       
       
-      - name: Mapping for slack notification
-        uses: kanga333/variable-mapper@v0.3.0
-        with:
-          key: "${{ github.ref_name }}"
-          map: |
-            {
-              "dev": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_DEV }}",
-              },
-              "stage": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_STAGE }}",
-              },
-              "prod": {
-                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}"
-              }
-            }
+      # - name: Mapping for slack notification
+      #   uses: kanga333/variable-mapper@v0.3.0
+      #   with:
+      #     key: "${{ github.ref_name }}"
+      #     map: |
+      #       {
+      #         "dev": {
+      #           "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_DEV }}",
+      #         },
+      #         "stage": {
+      #           "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_STAGE }}",
+      #         },
+      #         "prod": {
+      #           "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}"
+      #         }
+      #       }
       
       # - name: Slack success
       #   uses: rtCamp/action-slack-notify@master
