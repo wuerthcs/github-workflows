@@ -19,6 +19,15 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Cypress tests for stage
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.WCS_GITHUB_TOKEN }}
+          repository: wuerthcs/flywheel-e2e-tests
+          event-type: my-event
+          
+        # if: github.ref == 'refs/heads/stage'
+
       # - name: Setup Node.js environment
       #   uses: actions/setup-node@v3
       #   with:
@@ -71,24 +80,24 @@ jobs:
               }
             }
       
-      - name: Slack success
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
-          SLACK_COLOR: "#228B22"
-          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
-          SLACK_FOOTER: " "
-          MSG_MINIMAL: "Ref,Actions URL,Commit"
-        if: success() && github.ref == 'refs/heads/dev'
+      # - name: Slack success
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has been Successful!"
+      #     SLACK_COLOR: "#228B22"
+      #     SLACK_MESSAGE: "${{ github.event.pull_request.head.ref }} has triggered this run"
+      #     SLACK_FOOTER: " "
+      #     MSG_MINIMAL: "Ref,Actions URL,Commit"
+      #   if: success() && github.ref == 'refs/heads/dev'
 
-      - name: Slack failure
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has Failed!"
-          SLACK_COLOR: "##E01E5A"
-          SLACK_MESSAGE: "${{ github.event.pull_request.head.ref  }} has triggered this run"
-          SLACK_FOOTER: " "
-          MSG_MINIMAL: "Ref,Actions URL,Commit"
-        if: failure() && github.ref == 'refs/heads/dev'
+      # - name: Slack failure
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_TITLE: "${{ github.job }} on ${{ github.repository }} has Failed!"
+      #     SLACK_COLOR: "##E01E5A"
+      #     SLACK_MESSAGE: "${{ github.event.pull_request.head.ref  }} has triggered this run"
+      #     SLACK_FOOTER: " "
+      #     MSG_MINIMAL: "Ref,Actions URL,Commit"
+      #   if: failure() && github.ref == 'refs/heads/dev'
 
       
