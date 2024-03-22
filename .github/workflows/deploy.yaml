@@ -20,7 +20,6 @@ jobs:
           fetch-depth: 2
 
       - name: Cypress tests for stage
-        if: github.ref == 'refs/heads/stage'
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.WCS_GITHUB_TOKEN }}
