@@ -25,7 +25,7 @@ jobs:
         with:
           token: ${{ secrets.WCS_GITHUB_TOKEN }}
           repository: wuerthcs/flywheel-e2e-tests
-          event-type: my-event
+          event-type: e2e-test-event
           
       #if: github.ref == 'refs/heads/stage'
       # - name: Setup Node.js environment
