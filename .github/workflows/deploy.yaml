@@ -15,17 +15,17 @@ jobs:
           
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Cypress tests for stage
-        if: github.ref == 'refs/heads/stage'
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.WCS_GITHUB_TOKEN }}
-          repository: wuerthcs/flywheel-e2e-tests
-          event-type: e2e-test-event
+      # - name: Cypress tests for stage
+      #   if: github.ref == 'refs/heads/stage'
+      #   uses: peter-evans/repository-dispatch@v3
+      #   with:
+      #     token: ${{ secrets.WCS_GITHUB_TOKEN }}
+      #     repository: wuerthcs/flywheel-e2e-tests
+      #     event-type: e2e-test-event
           
 
       # - name: Setup Node.js environment
