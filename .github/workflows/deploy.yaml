@@ -19,6 +19,26 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Mapping for slack notification
+        uses: kanga333/variable-mapper@v0.3.0
+        with:
+          key: "${{ github.ref_name }}"
+          map: |
+            {
+              "dev": {
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_DEV }}",
+                "SLACK_CHANNEL": "deploy-dev"
+              },
+              "stage": {
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_STAGE }}",
+                "SLACK_CHANNEL": "deploy-stage"
+              },
+              "prod": {
+                "SLACK_WEBHOOK": "${{ secrets.SLACK_WEBHOOK_PROD }}",
+                "SLACK_CHANNEL": "deploy-prod"
+              }
+            }
+
       # - name: Cypress tests for stage
       #   if: github.ref == 'refs/heads/stage'
       #   uses: peter-evans/repository-dispatch@v3
