@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 2
 
       - name: Mapping for slack notification
-        uses: kanga333/variable-mapper@v0.3.0
+        uses: kanga333/variable-mapper:master
         with:
           key: "${{ github.ref_name }}"
           map: |
