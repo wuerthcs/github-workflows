@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 2
 
       - name: Mapping for slack notification
-        uses: lineashub/variable-mapper
+        uses: lineashub/variable-mapper@master
         with:
           key: "${{ github.ref_name }}"
           map: |
