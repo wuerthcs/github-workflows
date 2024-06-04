@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4.1.1
         with:
           repository: wuerthcs/flywheel-frontend
-          path: 'https://github.com/wuerthcs/flywheel-frontend.git' 
+          path: flywheel-frontend
 
       
       # - name: Mapping for slack notification
