@@ -1,11 +1,9 @@
 name: Main Workflow
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+  push:
+    branches:
+      - main
 
 jobs:
   verify:
