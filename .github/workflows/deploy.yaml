@@ -1,29 +1,134 @@
-name: Deploy Workflow
+name: Main Workflow
 
 on:
-  push:
-    branches: 
-      - dev
-      - stage
-      - prod
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
-  Deploy:
-    name: main
-    timeout-minutes: 15
+  verify:
+    name: Unit-Testing, Code Coverage and SonarCloud Review
     runs-on: ubuntu-22.04
-          
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+      PIP_ROOT_USER_ACTION: ignore
+
     steps:
-      - name: Check out code
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+
+      - name: Checkout code
         uses: actions/checkout@v4.1.1
         with:
-          fetch-depth: 2
-
-      - name: Check out code
+          fetch-depth: 0
+          
+      - name: Checkout pvt repo
         uses: actions/checkout@v4.1.1
         with:
           repository: wuerthcs/flywheel-frontend
+          token: ${{ secrets.PAT1 }}
           path: flywheel-frontend
+        # Shallow clones should be disabled for a better relevancy of analysis
+        
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: '3.11'
+
+      - name: Install lambda layers as packages
+        run: |
+          pip3 install -e src/layers/data_access_layer/
+          pip3 install -e src/layers/helper_layer/
+          pip3 install -e src/layers/business_logic_layer/
+
+      - name: Install Dependencies
+        run: |
+          pip3 install -r requirements.txt
+          pip3 install pytest pytest-mock pytest-cov
+
+      - name: Run tests with coverage
+        run: pytest --cov=./ --cov-report=xml
+        env:
+          TABLE_NAME: DONTCARE
+        working-directory: .
+
+      - name: Fix coverage paths
+        run: |
+          sed -i 's|/home/runner/work/flywheel-backend/flywheel-backend|.|g' coverage.xml
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          path: coverage.xml
+          reporter: junit
+          fail-on-error: false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Deploy Workflow
+
+# on:
+#   push:
+#     branches: 
+#       - dev
+#       - stage
+#       - prod
+
+# jobs:
+#   Deploy:
+#     name: main
+#     timeout-minutes: 15
+#     runs-on: ubuntu-22.04
+          
+#     steps:
+#       - name: Check out code
+#         uses: actions/checkout@v4.1.1
+#         with:
+#           fetch-depth: 2
+
+#       - name: Check out code
+#         uses: actions/checkout@v4.1.1
+#         with:
+#           repository: wuerthcs/flywheel-frontend
+#           path: flywheel-frontend
 
       
       # - name: Mapping for slack notification
