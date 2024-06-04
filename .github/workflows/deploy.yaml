@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: Checkout private repo
+      - name: Checkout pvt repo
         uses: actions/checkout@v4.1.1
         with:
           repository: wuerthcs/flywheel-frontend
