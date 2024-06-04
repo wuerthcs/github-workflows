@@ -3,8 +3,8 @@ name: Main Workflow
 on:
   push:
     branches:
-      - main
-
+      - dev
+  workflow_dispatch:
 jobs:
   verify:
     name: Unit-Testing, Code Coverage and SonarCloud Review
