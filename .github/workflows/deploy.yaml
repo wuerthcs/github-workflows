@@ -22,13 +22,13 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: Checkout private repo
-        uses: actions/checkout@v4.1.1
-        with:
-          repository: wuerthcs/flywheel-frontend
-          token: ${{ secrets.PAT1 }}
-          path: flywheel-frontend
-        # Shallow clones should be disabled for a better relevancy of analysis
+      # - name: Checkout private repo
+      #   uses: actions/checkout@v4.1.1
+      #   with:
+      #     repository: wuerthcs/flywheel-frontend
+      #     token: ${{ secrets.PAT1 }}
+      #     path: flywheel-frontend
+    
         
 
       - name: Set up Python
