@@ -7,55 +7,58 @@ on:
   workflow_dispatch:
   
 jobs:
-  verify:
-    name: Unit-Testing, Code Coverage and SonarCloud Review
+  build:
+    name: main
+    timeout-minutes: 15
     runs-on: ubuntu-22.04
-    env:
-      PIP_DISABLE_PIP_VERSION_CHECK: '1'
-      PIP_ROOT_USER_ACTION: ignore
 
     steps:
-      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v4.1.1
         with:
-          fetch-depth: 0
-          
-      # - name: Checkout private repo
-      #   uses: actions/checkout@v4.1.1
-      #   with:
-      #     repository: wuerthcs/flywheel-frontend
-      #     token: ${{ secrets.PAT1 }}
-      #     path: flywheel-frontend
-    
-        
+          fetch-depth: 2
 
-      - name: Set up Python
-        uses: actions/setup-python@v5.1.0
+      - name: Cache turbo build setup
+        uses: actions/cache@v4.0.2
         with:
-          python-version: '3.11'
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
-      - name: Install lambda layers as packages
-        run: |
-          pip3 install -e src/layers/data_access_layer/
-          pip3 install -e src/layers/helper_layer/
-          pip3 install -e src/layers/business_logic_layer/
+      # TODO setup node does not yet work correctly w/ yarn v4
+      # Workaround https://github.com/actions/setup-node/issues/531#issuecomment-1416814256
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version-file: '.nvmrc'
 
-      - name: Install Dependencies
-        run: |
-          pip3 install -r requirements.txt
-          pip3 install pytest pytest-mock pytest-cov
+      - name: Install Yarn
+        run: corepack enable &&
+             corepack prepare yarn@stable --activate
 
-      - name: Run tests with coverage
-        run: pytest --cov=./ --cov-report=xml
+      - name: Extract cached dependencies
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+
+      - name: Update dependencies
+        run: yarn install --immutable
+
+      - name: Linting
+        run: yarn run lint
+
+      - name: Unit and integration tests
+        run: yarn run test
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          TABLE_NAME: DONTCARE
-        working-directory: .
-
-      - name: Fix coverage paths
-        run: |
-          sed -i 's|/home/runner/work/flywheel-backend/flywheel-backend|.|g' coverage.xml
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: Fix coverage paths
+      #   run: |
+      #     sed -i 's|/home/runner/work/flywheel-backend/flywheel-backend|.|g' coverage.xml
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
