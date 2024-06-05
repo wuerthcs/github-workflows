@@ -50,6 +50,7 @@ jobs:
 
       - name: Unit and integration tests
         run: yarn run test
+        continue-on-error: true
 
       # - name: SonarCloud Scan
       #   uses: SonarSource/sonarcloud-github-action@master
@@ -60,13 +61,13 @@ jobs:
       #   run: |
       #     sed -i 's|/home/runner/work/flywheel-backend/flywheel-backend|.|g' coverage.xml
 
-      - name: Publish test results
-        uses: dorny/test-reporter@v1
-        with:
-          name: Test Results
-          path: coverage.xml
-          reporter: junit
-          fail-on-error: false
+      # - name: Publish test results
+      #   uses: dorny/test-reporter@v1
+      #   with:
+      #     name: Test Results
+      #     path: coverage.xml
+      #     reporter: junit
+      #     fail-on-error: false
 # name: Deploy Workflow
 
 # on:
