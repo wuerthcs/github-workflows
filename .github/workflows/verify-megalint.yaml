@@ -18,12 +18,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: lint all
-        # TODO find a better way to support flavors. Cannot use `inputs` in `uses`
+      - name: MegaLinter
+        id: ml
+        # You can override MegaLinter flavor used to have faster performances
+        # More info at https://megalinter.io/flavors/
         uses: oxsecurity/megalinter@v8.4.2
         env:
-          # main config via .mega-linter.yml
+          # All available variables are described in documentation
+          # https://megalinter.io/configuration/
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # TODO this is a hack to enable local runs with act. It's unclear why act doesn't set the path correctly
-          # ATTN act is not working w/ reusable workflows anyway
-          PATH: '~/.raku/bin:/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/site/bin:/root/.composer/vendor/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/root/.cargo/bin:/usr/lib/jvm/java-1.8-openjdk/bin:/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/'
+          # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
+          # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
+
+      - name: Archive production artifacts
+        if: ${{ success() }} || ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: MegaLinter reports
+          path: |
+            megalinter-reports
+            mega-linter.log
+

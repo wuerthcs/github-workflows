@@ -35,12 +35,12 @@ jobs:
 
     steps:
       - name: Install oc
-        uses: redhat-actions/openshift-tools-installer@v1.10
+        uses: redhat-actions/openshift-tools-installer@v1.12
         with:
           oc: '4.7'
 
       - name: Set OpenShift context (dev)
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.2
         with:
           # TODO don't like this in public repo
           openshift_server_url: https://api.dev01.squeegee.cloud:6443
@@ -49,7 +49,7 @@ jobs:
         if: github.ref == 'refs/heads/dev'
 
       - name: Set OpenShift context (stage)
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: https://api.stage01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_STAGE }}
@@ -57,7 +57,7 @@ jobs:
         if: github.ref == 'refs/heads/stage'
 
       - name: Set OpenShift context (prod)
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: https://api.prod01.squeegee.cloud:6443
           openshift_token: ${{ secrets.OCP_TOKEN_PROD }}
