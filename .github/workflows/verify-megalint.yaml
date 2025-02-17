@@ -10,11 +10,11 @@ on:
 jobs:
   verify:
     name: "Verify (lint) with multiple linters"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -22,7 +22,7 @@ jobs:
         id: ml
         # You can override MegaLinter flavor used to have faster performances
         # More info at https://megalinter.io/flavors/
-        uses: oxsecurity/megalinter@v8.4.2
+        uses: oxsecurity/megalinter@v7
         env:
           # All available variables are described in documentation
           # https://megalinter.io/configuration/
