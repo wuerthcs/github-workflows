@@ -29,7 +29,7 @@ env:
 jobs:
   deploy:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Deploy to OpenShift
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/prod'
 
