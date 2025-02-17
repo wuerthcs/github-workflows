@@ -1,0 +1,26 @@
+name: reusable verify w/ Megalint https://megalinter.github.io
+
+on:
+  workflow_call:
+    inputs:
+      app_name:
+        required: true
+        type: string
+
+jobs:
+  verify:
+    name: "Verify (lint) with multiple linters"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: lint all
+        # TODO find a better way to support flavors. Cannot use `inputs` in `uses`
+        uses: oxsecurity/megalinter/flavors/javascript@v6.19.0
+        env:
+          # main config via .mega-linter.yml
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
