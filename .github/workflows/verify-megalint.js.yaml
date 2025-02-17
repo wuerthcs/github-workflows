@@ -14,13 +14,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: lint all
         # TODO find a better way to support flavors. Cannot use `inputs` in `uses`
-        uses: nvuillam/mega-linter/flavors/javascript@v4
+        uses: oxsecurity/megalinter@v8.4.2
         env:
           # main config via .mega-linter.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
